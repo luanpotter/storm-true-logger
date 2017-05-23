@@ -13,5 +13,6 @@ const port = 7472;
 app.get('/logs', (req, res) => execute(`cat ${logFolder} | grep '\\[INFO\\] +'`, d => res.send(d)));
 app.get('/filter', (req, res) => execute(`cat ${logFolder} | grep '${req.query.q}'`, d => res.send(d)));
 app.get('/files', (req, res) => execute(`ls -la ${logFolder}`, d => res.send(d)));
+app.get('/clear', (req, res) => execute(`rm -rf ${logFolder}`, () => res.send('Deleted!')));
 
 app.listen(port, () => console.log(`storm-true-logger listening on port ${port}!`));
