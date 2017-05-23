@@ -16,19 +16,12 @@ const ips_p = machines.map(machine => execute(`gcloud compute instances list | g
 Promise.all(ips_p).then(ips => {
 	const logs = ips.map(ip => request('http://' + ip.trim() + ':7472/logs'));
 	Promise.all(logs).then(data => {
-		const logLines = _.flatten(data.map(el => el.split('\n'))); //.filter(line => line.match(/\+ \+/g));
+		const logLines = _.flatten(data.map(el => el.split('\n'))).filter(line => line.match(/\+ \+/g));
 		const filter = regex => logLines.filter(line => line.match(regex)).map(line => extract(line, regex)).map(parseFloat);
 
-		const produced = filter(/Producing tuple for storm ([0-9]*)$/);
-		const started = filter(/Started working on ([0-9]*)$/);
-		const acked = filter(/Emit and ack ([0-9]*)$/);
-		const emited = filter(/Producing messages for ActiveMQ ([0-9]*)$/);
-
-		log(produced.length);
-		log(started.length);
-		log(acked.length);
-		log(emited.length);
-
-		// log(logLines.filter(line => line.match(/\+ \+/g)));
+		log('Produced : ' + filter(/Producing tuple for storm ([0-9]*)$/).length);
+		log('Started : ' + filter(/Started working on ([0-9]*)$/).length);
+		log('Acked : ' + filter(/Emit and ack ([0-9]*)$/).length);
+		log('Emited : ' + filter(/Producing messages for ActiveMQ ([0-9]*)$/).length);
 	});
 })
