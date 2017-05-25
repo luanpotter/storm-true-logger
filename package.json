@@ -5,6 +5,7 @@
   "author": "Luan Nico",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^1.1.3",
     "express": "^4.15.3",
     "lodash": "^4.17.4",
     "promisify-node": "^0.4.0",
